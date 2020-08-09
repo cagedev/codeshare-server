@@ -5,12 +5,12 @@ Simple Flask SocketIO server application for broadcasting a code-snippets, basic
 ## TODO
 Lots. Only basic functionality implemented.
 - [x] Viewer code formatting
-- [] Authentication
-- [] (Locked) Rooms
-- [] Basic admin
-- [] Chat
-- [] (Auto)Copy
-- [] Highlight broadcasting
+- [ ] Authentication
+- [ ] (Locked) Rooms
+- [ ] Basic admin
+- [ ] Chat
+- [ ] (Auto)Copy
+- [ ] Highlight broadcasting
 
 ## Future
 VSCode & Thonny plugin.

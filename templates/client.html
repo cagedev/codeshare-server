@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flask-SocketIO Client</title>
+    <script
+      src="//code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+      integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/codemirror.min.js"
+      integrity="sha512-H5RyE1jRbGn8d0dsSstZi0SSs23X6Hkkf5hLneEIFyCfP/cBwJ/jFJESBuFBiUyzbGZGa06tnrvw1SboRKdwcA=="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/codemirror.min.css"
+      integrity="sha512-/BlxZbYLtYGExexketXsTi47eHp+r2kTeq2OHecQPZlfbc7WFXVrwbVW9HOYjI6c9Ti+P60ASmVLxittZ0EBGw=="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.56.0/mode/python/python.min.js"
+      integrity="sha512-DS+asaww1mE0V/N6YGVgoNIRj+yXB9hAV68vM6rVeWs0G+OyMd24LKrnS4Z+g26rgghU7qvGeEnRVUArV7nVog=="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function () {
+        namespace = "";
+        var socket = io(namespace);
+
+        socket.on("connect", function () {
+          socket.emit("my_event", { data: "I'm connected!" });
+        });
+
+        socket.on("message", function (msg, cb) {
+          $("#log").append(
+            "<br>" +
+              $("<div/>")
+                .text("sid" + msg.sid + ": " + msg.data)
+                .html()
+          );
+          if (cb) cb();
+        });
+
+        $("form#disconnect").submit(function (event) {
+          socket.emit("disconnect");
+          return false;
+        });
+
+        $("#code").bind("input propertychange", emit_state);
+        $("#lang").bind("input propertychange", emit_state);
+
+        function emit_state() {
+          socket.emit("code_update", {
+            code: $("#code").val(),
+            lang: $("#lang").val(),
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Flask-SocketIO Client</h1>
+    <p>Async mode is: <b>{{ async_mode }}</b></p>
+    <h2>Send:</h2>
+    <form id="disconnect" method="POST" action="#">
+      <input type="submit" value="Disconnect" />
+    </form>
+    <h2>Data:</h2>
+    <form>
+      <label for="lang">Language:</label>
+      <select name="cars" id="lang">
+        <option value="python">python</option>
+      </select>
+    </form>
+    <form>
+      <textarea id="code"></textarea>
+    </form>
+    <h2>Log:</h2>
+    <div id="log"></div>
+  </body>
+</html>

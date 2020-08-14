@@ -61,6 +61,7 @@
           $("#code").val(msg.code);
           myCodeMirror.setValue(msg.code);
           $("#lang").text(msg.lang);
+          $("#file").text(msg.file);
           myCodeMirror.setOption("mode", msg.lang);
           if (cb) cb();
         });
@@ -82,6 +83,7 @@
     <h2>Data:</h2>
     <form>
       <p id="lang"></p>
+      <p id="file"></p>
       <textarea id="code"></textarea>
     </form>
     <h2>Log:</h2>
